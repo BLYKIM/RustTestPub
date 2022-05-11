@@ -1,0 +1,7 @@
+[database]
+url = "postgres://postgres:jgkim@172.17.0.2:5432/resourcedb"
+name = "postgres"
+password = "jgkim"
+port = 5432
+addr = "172.17.0.2"
+dbname = "resourcedb"
