@@ -1,10 +1,9 @@
-use rand::seq::SliceRandom; // Use this for .choose over slices
+fn my_algorithm(number: i32) -> i32 {
+    0
+}
 
 fn main() {
-    let my_letters = vec!['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
-    let mut rng = rand::thread_rng();
-    for _ in 0..6 {
-        print!("{} ", my_letters.choose(&mut rng).unwrap());
-    }
+    let my_input = vec![];
+    let my_number = my_input.into_iter();
+    println!("{}", my_algorithm(my_input));
 }
