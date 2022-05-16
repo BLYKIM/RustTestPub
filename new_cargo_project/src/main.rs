@@ -2,14 +2,14 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
-fn my_algorithm(number: i32) -> i32 {
-    number
-}
+// fn my_algorithm(number: i32) -> i32 {
+//     number
+// }
 
 fn main() {
     let secret_number = rand::thread_rng().gen_range(1..101);
 
-    let test_num = 31;
+    //let test_num = 31;
 
     loop {
         println!("Please input your guess.");
