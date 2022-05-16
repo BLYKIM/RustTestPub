@@ -1,44 +1,64 @@
-use rand::Rng;
-use std::cmp::Ordering;
-use std::io;
+// use rand::Rng;
+// use std::cmp::Ordering;
+// use std::io;
 
-// fn my_algorithm(number: i32) -> i32 {
-//     number
+// // fn my_algorithm(number: i32) -> i32 {
+// //     number
+// // }
+
+// fn main() {
+//     let secret_number = rand::thread_rng().gen_range(1..101);
+
+//     //let test_num = 31;
+
+//     loop {
+//         println!("Please input your guess.");
+//         let mut my_input = String::new();
+//         io::stdin()
+//             .read_line(&mut my_input)
+//             .expect("Failed to read line");
+
+//         //println!("{:?}", my_input);
+//         let my_input: u32 = match my_input.trim().parse() {
+//             Ok(num) => num,
+//             Err(_) => {
+//                 println!("Type a number!");
+//                 continue;
+//             }
+//         };
+
+//         println!("You entered: {}", my_input);
+
+//         match my_input.cmp(&secret_number) {
+//             Ordering::Less => println!("Too small!"),
+//             Ordering::Greater => println!("Too big!"),
+//             Ordering::Equal => {
+//                 println!("You win!");
+//                 break;
+//             }
+//         }
+//     }
+//     //println!("{}", my_algorithm(test_num));
+
+//     println!("The secret number is {}", secret_number);
 // }
 
-fn main() {
-    let secret_number = rand::thread_rng().gen_range(1..101);
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
 
-    //let test_num = 31;
-
-    loop {
-        println!("Please input your guess.");
-        let mut my_input = String::new();
-        io::stdin()
-            .read_line(&mut my_input)
-            .expect("Failed to read line");
-
-        //println!("{:?}", my_input);
-        let my_input: u32 = match my_input.trim().parse() {
-            Ok(num) => num,
-            Err(_) => {
-                println!("Type a number!");
-                continue;
-            }
-        };
-
-        println!("You entered: {}", my_input);
-
-        match my_input.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[..i];
         }
     }
-    //println!("{}", my_algorithm(test_num));
 
-    println!("The secret number is {}", secret_number);
+    &s[..]
+}
+
+fn main() {
+    let mut s = String::from("Hello world");
+
+    let word = first_word(&s);
+
+    println!("{}", word);
 }
