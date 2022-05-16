@@ -1,3 +1,3 @@
 fn main() {
-    println!("do not warn");
+    let x = 2;
 }
