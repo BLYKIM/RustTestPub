@@ -1,0 +1,380 @@
+Rust란 무엇인가
+
+형식 안전 : 컴파일러는 잘못된 형식의 변수에 어떤 작업도 적용되지 않게 보장합니다.
+메모리 안전 : Rust 포인터는 항상 유효한 메모리를 참조합니다.
+데이터 경합 없음 : Rust의 바로우 검사기는 프로그램의 여러 부분이 동일한 값을 동시에 변경할 수 없도록 하여 스레드 보안을 보장합니다.
+무비용 추출 : Rust를 사용하면 최소한의 성능 비용으로, 또는 성능 비용 없이 반복, 인터페이스, 함수 프로그래밍 같은 상위 수준의 개념을 사용할 수 있습니다.
+           또한 추상화는 기본 코드를 직접 작성하는 것처럼 작동됩니다.
+최소 런타임 : Rust에는 최소한의 선택적 런타임이 있습니다. 메모리를 효율적으로 관리할 수 있도록 이 언어에는 가비지 수집기도 없습니다.
+           이러한 측면에서 Rust는 C 및 C++ 같은 언어와 가장 유사합니다.
+운영 체제 미설치 대상 : Rust는 임베디드 및 "운영 체제 미설치" 프로그래밍을 대상으로 지정하여 운영 체제 커널 또는 디바이스 드라이버 작성에 적합하도록 합니다.
+
+Rust의 고유한 기능
+
+모듈 시스템: 모듈, 크레이트, 경로
+표준 라이브러리 및 타사 크레이트
+Cargo 도구 및 종속성 관리자
+
+모듈 시스템 = 코드를 관리하고 구성하는 데 도움이 되는 기능모음
+
+크레이트: 크레이트는 컨트롤 단위입니다. 컴파일러에서 실행할 수 있는 가장 작은 코드부분
+        크레이트에 있는 코드는 이진 실행이나 라이브러리를 생성하기 위해 함께 컴파일 됩니다
+        크레이트만이 다시 사용할 수 있는 단위로 컴파일 됩니다.
+        크레이트는 명명되지 않은 최상의 모듈이 있는 Rust 모듈의 계층 구조를 포합합니다.
+
+모듈: 모듈은 크레이트 내에서 개별 코드 항목의 범위를 관리하도록 하여 프로그램을 구성하는 데 도움이 됩니다.
+     관련 코드 항목 또는 함께 사용되는 항목을 동일한 모듈로 그룹화 할 수 있습니다. 순환 코드 정의는 다른 모듈에 걸쳐 있을 수 있습니다.
+
+경로: 경로를 사용하여 코드의 이름 항목을 지정할 수 있습니다. 예를 들어, 경로는 벡터, 코드 함수, 모듈 등의 데이터 정의가 될 수 있습니다.
+     모듈 기능을 사용하면 경로에 대한 개인 정보를 제어할 수도 있습니다.
+     공개적으로 액세스할 수 있는 코드 부분 및 전용 파트를 지정할 수 있습니다. 이 기능을 통해 구현 세부 정보를 숨길 수 있습니다.
+
+
+Rust 크레이트 및 라이브러리 사용
+
+표준 라이브러리 Std에는 프로그램의 기본 정의 및 작업에 사용할 수 있는 코드가 포함되어 있습니다.
+이 라이브러리에는 String 및 Vec<T>와 같은 핵심 데이터 형식, Rust 기본 형식에 대한 작업, 일반적으로 사용되는 매크로 함수를 위한 코드,
+입력 및 출력 작업에 대한 지원, 기타 여러 기능 영역이 포함되어 있습니다.
+
+수만 개의 라이브러리와 타사 크레이트가 있으며, 대부분의 경우 crates.io를 통해 액세스할 수 있습니다.
+몇 가지 크레이트만 살펴보면
+ Std
+    Std::collections    HashMap 등의 컬렉션 형식에 대한 정의
+    Std::env            사용자 환경으로 작업하기 위한 변수
+    Std::fmt            출력 형식을 제어하는 기능
+    Std::fs             파일 시스템을 사용하기 위한 함수
+    Std::io             입/출력 작업을 위한 정의 및 기능
+    Std::path           파일 시스템 경로 데이터 작업을 지원하는 정의 및 함수
+
+structopt               명령줄 인수를 쉽게 구문 분석하기 위한 타사 크레이트
+chrono                  날짜 및 시간 데이터를 처리하는 타사 크레이트
+regex                   정규식을
+
+
+Yew
+
+Components are created by implementing the Component trait for a type
+
+The Component trait has a number of methods which need to be implemented;
+
+Yew will call these at different stages in the lifecycle of a component.
+
+     Create
+     fn create(ctx: &Context<Self>) -> Self {
+          MyComponent
+     }
+
+     View
+     fn view(&self, ctx: &Context<Self>) -> Html {
+          let onclick = ctx.link().callback(|_| Msg::Click);
+          html! {
+               <button {onclick}>{ &ctx.props().button_text }</button>
+          }
+     }
+
+     Rendered
+     fn rendered(&mut self, _ctx: &Context<Self>, first_render: bool) {
+          if first_render {
+               if let Some(input) = self.node_ref.cast::<HtmlInputElement>() {
+                    input.focus();
+               }
+          }
+     }
+
+     Update
+     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+          match msg {
+               Msg::SetInputEnabled(enabled) => {
+                    if self.input_enabled != enabled {
+                         self.input_enabled = enabled;
+                         true // Re-render
+                    } else {
+                         false
+                    }
+               }
+          }
+     }
+
+     Changed
+     Components may be re-rendered by their parents. When this happens, they could recieve new properties
+     and need to re-render.
+
+     Destroy
+     After Components are unmounted from the DOM, Yew calls the destroy lifecycle method;
+     this is necessary if you need to undertake operations to clean up after earlier actions of a
+     component before it is destroyed.
+
+Infinite loops
+only caused when trying to update the same component after every render when that update also request the
+component to be rendered.
+
+create - > view (what to render) -> rendered (schedule an update message) -> update (true, needs to re-render)
+-> view (loop)
+
+Associated Types
+
+Message, Properties
+
+     Message type is used to send messages to a component after an event has taken place;
+     the Message type will normally be an enum, where each variant is an event to be handled
+
+     Properties represents the information passed to a component from its parent.
+     This type must implement the Properties trait (usually by deriving it) and can specify whether certain properties
+     are required or optional.
+     It is common practice to create a struct called Props in your component's module and use that as the component's
+     Properties type.
+
+Context
+All component lifecycle methods take a context object. This object provides a reference to component's scope,
+which allows sending messages to a component and the props passed to the component.
+
+
+
+
+Callbacks
+
+Callbacks are used to communicate with services, agents, and parent components within Yew.
+Internally their type is just Fn wrapped in Rc to allow them to be cloned.
+
+They have and emit function that takes their <IN> type as an argument and converts that to a message expected by
+its destination.
+
+If you need to a callback that might not need to cause an update, use batch_callback.
+
+     let onkeypress = ctx.link().batch_callback(|event: KeyboardEvent| {
+          if event.key() == "Enter" {
+               Some(Msg::Submit)
+          } else {
+               None
+          }
+     });
+
+     html! {
+          <input type="text" {onkeypress} />
+     }
+
+
+
+
+Scope
+
+     Component's Scope<_> API
+
+     mechanism through which components are able to create callbacks and update themselves using messages.
+     We obtain a reference to this by calling link() on the context object passed to the component.
+
+     send_message
+
+     send_message_batch
+
+     callback
+               callback_once  accepts a FnOnce instead of a Fn
+
+     batch_callback
+               batch_callback_once
+
+
+
+Properties
+
+     enable child and parent components to communicate with each other.
+     Every component has an associated properties type which describes what is passed down from the parents.
+     In practice there's no reason for it to be anything but a struct where each field represents a property.
+
+
+Derive macro
+
+Instead of implementing the Properties trait yourself, you should use
+#[derive(properties)]
+to automatically generate the implementation instead. Types for which you derive Properties must also implement PartialEq.
+
+Field attributes
+
+When deriving Properties, all field are required by default. The following attributes allow you to give your
+props initial values which will be used unless they're set to another value.
+
+#[prop_or_default]
+#[prop_or(value)]
+#[prop_or_else(function)]
+
+Properties require PartialEq to be implemented.
+
+
+Props macro
+
+The yew::props! macro allows you to build properties the same way the html! macro does it.
+
+
+
+Children
+
+     General usage
+
+     when allowing a component to have children, you don't care what type of children the component has.
+     pub children: Children
+
+     Advanced usage
+
+     Typed children
+     use yew::html::ChildrenWithProps<T>
+
+     Enum typed children
+     Optional typed child
+
+
+
+Refs
+
+The ref keyword can be used inside of any HTML element of component to get the DOM Element that the
+item is attached to.
+This can be used to make changes to the DOM outside of the view lifecycle method.
+
+
+
+
+
+
+HTML
+the html! macro allows you to write HTML and SVG code declaratively.
+
+Important.
+     1. The html! macro only accepts one root html node
+     2. An empty html! {} invocation is valid and will not render anything
+     3. Literals must always be quoted and wrapped in braces: html! { "Hello, World" }
+     4. The html! macro will make all tag names lowercases <-> VTag::new
+
+Tag Structure
+Tags must either self-close <... />
+
+Children
+Lints
+
+
+
+Basic components
+Nested components
+Nested Children with props
+
+
+
+Elements
+
+DOM nodes
+
+using web-sys, you can create DOM elements and convert them into a node - which can then be used
+as a Html value using VRef
+
+fn view(&self, _ctx: &Context<Self>) -> Html {
+     let div: Element = document().create_element("div").unwrap();
+     div.set_inner_html("Hello, World!");
+     let node: Node = div.into();
+     Html::VRef(node)
+}
+
+Dynamic tag names
+For example, you might have a Title component which can render anything from h1 to h6 depending on a level prop.
+@{name}
+
+     use yew::html;
+
+     let level = 5;
+     let text = "Hello, Wolrd!".to_owned();
+
+     html! {
+          <@{format!("h{}", level)} class="title">{ text }</@>
+     };
+
+Boolean attributes
+checked, hidden, required
+     <div hidden=true>
+          { "This div is hidden." }
+     </div>
+     ==
+     <div hidden>This div is hidden.</div>
+
+String-like attributes
+
+     let str_placeholder = "I'm a str!";
+     let string_placeholder = String::from("I'm a String!");
+     let attrvalue_placeholder = AttrValue::from("I'm an AttrValue!");
+
+     html! {
+          <div>
+               <input placeholder={str_placeholder} />
+               <input placeholder={string_placeholder} />
+               <input placeholder={attrvalue_placeholder} />
+          </div>
+     };
+
+Optional attributes for HTML elements
+Some(x) or None
+
+Listeners
+     Listener attributes need to be passed a Callback which is a wrapper around a closure.
+     - Component handler
+     - Agent handler
+     - Other Cases
+
+
+Events
+Yew integrates with the web-sys crate and uses the events from that crate.
+
+Event Types
+event listener name, web_sys event type
+on------     ,      Event, MouseEvent, FocusEvent, DragEvent, InputEvent, KeyboardEvent, ProgressEvent, WheelEvent, AnimationEvent, PointerEvent, TouchEvent, TransitionEvent
+
+Typed event target
+     Using JsCast
+     Using TargetCast
+     Using NodeRef
+
+Manual event listener
+     Using Closure(verbose)
+     Using gloo(concise)
+
+
+
+Classes
+The struct Classes can be used to deal with HTML Classes
+When pushing a string to the set, Classes ensures that there is one element for every class
+even if a single string might contain multiple classes.
+
+Classes can also be merged by using Extend or push.
+In fact, anything that implements Into<Classes> can be used to push new classes to the set.
+
+
+
+Fragment
+the html! macro always requires a single root node. In order to get around this restriction,
+you can use an "empty tag" (these are also called "fragments").
+
+     html! {
+          <>
+               <div></div>
+               <p></p>
+          </>
+     };
+
+
+
+Lists
+     Iterators
+          collect::<Html>()
+          for keyword
+     Keyed lists
+          key is a special prop provided by Yew which gives an html element a unique identifier which can
+          be used for optimization purpose.
+
+
+
+Literals and Expressions
+
+Literals
+     If expressions resolve to types that implement Display, they will be converted to strings and
+     inserted into the DOM as a Text node.
+
+     All display text must be enclosed by {} blocks because text is handled as an expression.
+     This is the largest deviation from normal HTML syntax that Yew makes.
+
+Expressions
+     You can insert expressions in you HTML using {} blocks, as long as they resolve to Html
