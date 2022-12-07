@@ -8,28 +8,31 @@ use std::{
     thread,
 };
 
+///
+/// # Panics
+/// todo
 pub fn parsec(filepath: &Path) {
-    // // regular expression
-    // lazy_static! {
-    //     static ref RE: Regex = Regex::new(
-    //         r#"(?x)
-    // (?P<ip>\S+)\s
-    // (?P<minus>\S*)\s
-    // (?P<uid>\S*)\s
-    // (?P<timedate>\[[^\]]+\])\s"
-    // (?P<method>[A-Z]*[^"]*)"\s
-    // (?P<code>[0-9]{3})\s
-    // (?P<size>[0-9]*)\s"
-    // (?P<url>[^"]*)"\s"
-    // (?P<info>[^"]*)"\n?"#,
-    //     )
-    //     .unwrap();
-    // }
+    // regular expression
+    lazy_static! {
+        static ref RE: Regex = Regex::new(
+            r#"(?x)
+    (?P<ip>\S+)\s
+    (?P<minus>\S*)\s
+    (?P<uid>\S*)\s
+    (?P<timedate>\[[^\]]+\])\s"
+    (?P<method>[A-Z]*[^"]*)"\s
+    (?P<code>[0-9]{3})\s
+    (?P<size>[0-9]*)\s"
+    (?P<url>[^"]*)"\s"
+    (?P<info>[^"]*)"\n?"#,
+        )
+        .unwrap();
+    }
 
     let linesec = file_to_vec(filepath).expect("error file_to_vec"); // Vec<String> log file read , split n thread, n vector
     let mut index = 0;
     let n = 10; // n thread  ,  <- take n_core (n-1)
-    let len = linesec.len() as u32; // to take receive
+    let len: u32 = linesec.len().try_into().expect("casting usize to u32"); // to take receive
     let cnt = linesec.len() / n; // counter to n thread
 
     let vec_ref = Arc::new(linesec); // arc
@@ -66,7 +69,7 @@ pub fn parsec(filepath: &Path) {
                 }
             }
         }));
-        index = index + cnt; // index++
+        index += cnt; // index++
     }
 
     //create or append csv file
@@ -87,7 +90,10 @@ pub fn parsec(filepath: &Path) {
     }
 }
 
-fn file_to_vec(filepath: &Path) -> io::Result<Vec<String>> {
+///
+/// # Errors
+/// todo
+pub fn file_to_vec(filepath: &Path) -> io::Result<Vec<String>> {
     // log file read
     let file_in = File::open(filepath)?;
     let file_reader = io::BufReader::new(file_in);
