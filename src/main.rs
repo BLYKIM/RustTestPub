@@ -1,3 +1,5 @@
+#[allow(clippy::wildcard_imports)]
+use project::advent::*;
 use std::{env, process::exit};
 
 use anyhow::Result;
@@ -27,6 +29,14 @@ fn main() -> Result<()> {
     };
 
     println!("host name: {}", settings.host_name);
+    // day_one()?;
+    // day_two()?;
+    // day_three()?;
+    // day_four()?;
+    // day_five()?;
+    // day_six()?;
+    day_seven()?;
+
     Ok(())
 }
 
