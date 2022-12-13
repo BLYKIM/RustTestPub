@@ -29,13 +29,16 @@ fn main() -> Result<()> {
     };
 
     println!("host name: {}", settings.host_name);
+
+    println!("*** day_start ***");
     // day_one()?;
     // day_two()?;
     // day_three()?;
     // day_four()?;
     // day_five()?;
     // day_six()?;
-    day_seven()?;
+    // day_seven()?;
+    day_eight()?;
 
     Ok(())
 }

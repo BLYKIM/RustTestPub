@@ -1,6 +1,7 @@
 use super::inputs::read_file;
 use anyhow::Result;
 
+const MAXIMUM: usize = 40_000_000;
 ///
 /// # Errors
 ///
@@ -12,6 +13,7 @@ pub fn day_seven() -> Result<()> {
         .peekable();
     let mut pwd: Vec<(String, usize)> = Vec::new();
     let mut popped: Vec<(String, usize)> = Vec::new();
+    let mut total = 0usize;
 
     for line in lines {
         let line_vec: Vec<&str> = line.split(' ').collect();
@@ -36,6 +38,7 @@ pub fn day_seven() -> Result<()> {
         } else {
             // println!("file");
             let file_size = line_vec.get(0).unwrap().parse::<usize>().unwrap();
+            total += file_size;
             for i in 0..pwd.len() {
                 if let Some((_, v)) = pwd.get_mut(i) {
                     *v += file_size;
@@ -46,10 +49,17 @@ pub fn day_seven() -> Result<()> {
     println!("re: {:?}", pwd);
     println!("pop: {:?}", popped);
 
+    type DirInfo = (String, usize);
+
+    let mut target: DirInfo = ("".to_string(), usize::MAX);
+
     let mut new = Vec::new();
     for (name, val) in popped {
+        if total > MAXIMUM && val > (total - MAXIMUM) && target.1 > val {
+            target = (name.clone(), val);
+        }
         if val < 100_000 && val != 0 {
-            new.push((name, val))
+            new.push((name, val));
         }
     }
 
@@ -59,7 +69,8 @@ pub fn day_seven() -> Result<()> {
     for (_, val) in new {
         sum += val;
     }
-    println!("{}", sum);
+    println!("total: {}, sum: {}", total, sum);
+    println!("target dir: {:?}", target);
 
     Ok(())
 }
