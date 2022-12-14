@@ -15,18 +15,19 @@ pub fn day_nine() -> Result<()> {
     let rope_len = rope.len();
     let mut visited: HashMap<(i32, i32), bool> = HashMap::new();
     visited.insert((0, 0), true); // start position
-    let mut _testcnt = 0;
+
+    // let mut testcnt = 0;
     for line in lines {
         let step: Vec<&str> = line.split(' ').collect();
         let dist = step[1].parse::<u32>()?;
         let mut diag_move = rope.clone();
 
-        match step[0] {
+        match *step.first().unwrap() {
             "U" => {
                 // println!("up {}", dist);
                 for _ in 0..dist {
                     diag_move = rope.clone();
-                    rope[0].1 += 1;
+                    rope.first_mut().unwrap().1 += 1;
 
                     for i in 1..rope_len {
                         match is_adj(rope[i - 1], rope[i]) {
@@ -48,7 +49,7 @@ pub fn day_nine() -> Result<()> {
                 // println!("down {}", dist);
                 for _ in 0..dist {
                     diag_move = rope.clone();
-                    rope[0].1 -= 1;
+                    rope.first_mut().unwrap().1 -= 1;
 
                     for i in 1..rope_len {
                         match is_adj(rope[i - 1], rope[i]) {
@@ -70,7 +71,7 @@ pub fn day_nine() -> Result<()> {
                 // println!("left {}", dist);
                 for _ in 0..dist {
                     diag_move = rope.clone();
-                    rope[0].0 -= 1;
+                    rope.first_mut().unwrap().0 -= 1;
 
                     for i in 1..rope_len {
                         match is_adj(rope[i - 1], rope[i]) {
@@ -93,7 +94,7 @@ pub fn day_nine() -> Result<()> {
                 // println!("right {}", dist);
                 for _ in 0..dist {
                     diag_move = rope.clone();
-                    rope[0].0 += 1;
+                    rope.first_mut().unwrap().0 += 1;
 
                     for i in 1..rope_len {
                         match is_adj(rope[i - 1], rope[i]) {
@@ -114,8 +115,8 @@ pub fn day_nine() -> Result<()> {
             }
         }
 
-        // _testcnt += 1;
-        // if _testcnt == 2 {
+        // testcnt += 1;
+        // if testcnt == 2 {
         //     break;
         // }
     }
@@ -142,10 +143,8 @@ fn is_adj(head: (i32, i32), tail: (i32, i32)) -> AdjInfo {
     {
         // adj
         return AdjInfo::Adj;
-    } else if (head.0 - tail.0 == 2 && head.1 - tail.1 == 2)
-        || (head.0 - tail.0 == -2 && head.1 - tail.1 == 2)
-        || (head.0 - tail.0 == 2 && head.1 - tail.1 == -2)
-        || (head.0 - tail.0 == -2 && head.1 - tail.1 == -2)
+    } else if (head.1 - tail.1 == -2 || head.1 - tail.1 == 2)
+        && (head.0 - tail.0 == -2 || head.0 - tail.0 == 2)
     {
         return AdjInfo::Diagonal;
     } else if head.0 - tail.0 == 2 {
@@ -157,8 +156,7 @@ fn is_adj(head: (i32, i32), tail: (i32, i32)) -> AdjInfo {
     } else if head.1 - tail.1 == 2 {
         // y-1
         return AdjInfo::DownSide;
-    } else {
-        // y+1
-        return AdjInfo::UpSide;
     }
+    // y+1
+    AdjInfo::UpSide
 }

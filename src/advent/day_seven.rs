@@ -2,6 +2,7 @@ use super::inputs::read_file;
 use anyhow::Result;
 
 const MAXIMUM: usize = 40_000_000;
+type DirInfo = (String, usize);
 ///
 /// # Errors
 ///
@@ -18,7 +19,7 @@ pub fn day_seven() -> Result<()> {
     for line in lines {
         let line_vec: Vec<&str> = line.split(' ').collect();
 
-        if line_vec.get(0).unwrap().starts_with('$') {
+        if line_vec.first().unwrap().starts_with('$') {
             // println!("command");
             if line_vec.get(1).unwrap().starts_with("cd") {
                 if line_vec.get(2).unwrap().starts_with("..") {
@@ -31,13 +32,13 @@ pub fn day_seven() -> Result<()> {
                     pwd.push((now.clone(), 0));
                 }
             }
-        } else if line_vec.get(0).unwrap().starts_with("dir") {
+        } else if line_vec.first().unwrap().starts_with("dir") {
             // dir list
             // let name = line_vec[1].to_string();
             // pwd.insert(name.clone(), 0);
         } else {
             // println!("file");
-            let file_size = line_vec.get(0).unwrap().parse::<usize>().unwrap();
+            let file_size = line_vec.first().unwrap().parse::<usize>().unwrap();
             total += file_size;
             for i in 0..pwd.len() {
                 if let Some((_, v)) = pwd.get_mut(i) {
@@ -46,12 +47,10 @@ pub fn day_seven() -> Result<()> {
             }
         }
     }
-    println!("re: {:?}", pwd);
-    println!("pop: {:?}", popped);
+    // println!("re: {:?}", pwd);
+    // println!("pop: {:?}", popped);
 
-    type DirInfo = (String, usize);
-
-    let mut target: DirInfo = ("".to_string(), usize::MAX);
+    let mut target: DirInfo = (String::new(), usize::MAX);
 
     let mut new = Vec::new();
     for (name, val) in popped {
@@ -63,7 +62,7 @@ pub fn day_seven() -> Result<()> {
         }
     }
 
-    println!("result: {:#?}", new);
+    // println!("result: {:#?}", new);
 
     let mut sum = 0usize;
     for (_, val) in new {
