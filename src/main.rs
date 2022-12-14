@@ -39,7 +39,9 @@ fn main() -> Result<()> {
     // day_six()?;
     // day_seven()?;
     // day_eight()?;
-    day_nine()?;
+    // day_nine()?;
+    // day_ten()?;
+    day_eleven()?;
 
     Ok(())
 }

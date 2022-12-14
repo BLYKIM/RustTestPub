@@ -32,7 +32,7 @@ pub fn day_eight() -> Result<()> {
             let target_tree = tree_line.get(j).unwrap();
 
             // part 2
-            for left in (0..=(j - 1)).rev() {
+            for left in (0..j).rev() {
                 if let Some(left_tree) = tree_line.get(left) {
                     if left_tree >= target_tree {
                         direction.0 = j - left;
@@ -52,7 +52,7 @@ pub fn day_eight() -> Result<()> {
                     }
                 }
             }
-            for up in (0..=(i - 1)).rev() {
+            for up in (0..i).rev() {
                 if let Some(line) = line_vec.get(up) {
                     if let Some(up_tree) = line.get(j) {
                         if up_tree >= target_tree {
@@ -79,7 +79,7 @@ pub fn day_eight() -> Result<()> {
 
             let score = direction.0 * direction.1 * direction.2 * direction.3;
             if highest.0 < score {
-                println!("{:?}", direction);
+                // println!("{:?}", direction);
                 highest = (score, i + 1, j + 1);
             }
 
