@@ -48,7 +48,7 @@ pub fn day_three() -> Result<()> {
             }
         }
     }
-    println!("{}", sum_badges);
+    println!("{sum_badges}");
 
     Ok(())
 }

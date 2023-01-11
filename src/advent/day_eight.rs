@@ -151,7 +151,7 @@ pub fn day_eight() -> Result<()> {
         // println!("**** {} line clear ****", i + 1);
     }
 
-    println!("highest score: {:?}", highest);
+    println!("highest score: {highest:?}");
     // println!("visible trees: {}", visible_tree);
 
     Ok(())

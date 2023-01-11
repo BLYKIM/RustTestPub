@@ -8,6 +8,7 @@ mod day_seven;
 mod day_six;
 mod day_ten;
 mod day_three;
+mod day_twelve;
 mod day_two;
 
 mod inputs;
@@ -22,4 +23,5 @@ pub use day_seven::day_seven;
 pub use day_six::day_six;
 pub use day_ten::day_ten;
 pub use day_three::day_three;
+pub use day_twelve::day_twelve;
 pub use day_two::day_two;

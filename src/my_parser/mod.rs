@@ -16,5 +16,5 @@ pub fn my_parser() {
     parse::parsec(path);
 
     let elapsed = now.elapsed();
-    println!("Elapsed: {:.2?}", elapsed);
+    println!("Elapsed: {elapsed:.2?}");
 }

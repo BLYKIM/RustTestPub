@@ -31,7 +31,7 @@ pub fn day_four() -> Result<()> {
             range_pairs += 1;
         }
     }
-    println!("{}", range_pairs);
+    println!("{range_pairs}");
 
     Ok(())
 }

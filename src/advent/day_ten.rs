@@ -55,7 +55,7 @@ pub fn day_ten() -> Result<()> {
             _ => {}
         }
     }
-    println!("End: {}th cycle, X has {}", cycle, x);
+    println!("End: {cycle}th cycle, X has {x}");
     // let mut sum = 0;
     // for i in strength_vec {
     //     sum += i;

@@ -25,7 +25,7 @@ pub fn day_six() -> Result<()> {
             break;
         }
 
-        println!("marker: {}. {:?}", marker, &chars[marker - 14..marker]);
+        println!("marker: {marker}. {:?}", &chars[marker - 14..marker]);
     }
     Ok(())
 }

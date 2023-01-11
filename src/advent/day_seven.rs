@@ -68,8 +68,8 @@ pub fn day_seven() -> Result<()> {
     for (_, val) in new {
         sum += val;
     }
-    println!("total: {}, sum: {}", total, sum);
-    println!("target dir: {:?}", target);
+    println!("total: {total}, sum: {sum}");
+    println!("target dir: {target:?}");
 
     Ok(())
 }

@@ -1,12 +1,11 @@
-#[allow(clippy::wildcard_imports)]
-use project::advent::*;
-use std::{env, process::exit};
-
-use anyhow::Result;
-
-use crate::settings::Settings;
-
 mod settings;
+// #[allow(clippy::wildcard_imports)]
+// use project::advent::*;
+use crate::settings::Settings;
+use anyhow::Result;
+use num_enum::IntoPrimitive;
+use project::ec::test_3;
+use std::{env, process::exit};
 
 const USAGE: &str = "\
 USAGE:
@@ -20,12 +19,14 @@ ARG:
     <CONFIG>    A TOML config file
 ";
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     println!("rust-test");
-    let settings = if let Some(config_filename) = parse() {
-        Settings::from_file(&config_filename)?
+
+    let (settings, _pick) = if let Some((config_filename, pick)) = parse() {
+        (Settings::from_file(&config_filename)?, pick)
     } else {
-        Settings::new()?
+        (Settings::new()?, String::new())
     };
 
     println!("host name: {}", settings.host_name);
@@ -41,15 +42,24 @@ fn main() -> Result<()> {
     // day_eight()?;
     // day_nine()?;
     // day_ten()?;
-    day_eleven()?;
+    // day_eleven()?;
+    // day_twelve()?;
+
+    // read_file("inputs/test.txt").await;
+
+    // test_one()?;
+    // test_two(&pick)?;
+
+    test_3();
 
     Ok(())
 }
 
-fn parse() -> Option<String> {
+fn parse() -> Option<(String, String)> {
     let mut args = env::args();
     args.next()?;
     let arg = args.next()?;
+    let option = args.next();
     if args.next().is_some() {
         eprintln!("Error: too many arguments");
         exit(1);
@@ -58,7 +68,7 @@ fn parse() -> Option<String> {
     if arg == "--help" || arg == "-h" {
         println!("{}", version());
         println!();
-        print!("{}", USAGE);
+        print!("{USAGE}");
         exit(0);
     }
     if arg == "--version" || arg == "-V" {
@@ -66,20 +76,94 @@ fn parse() -> Option<String> {
         exit(0);
     }
     if arg.starts_with('-') {
-        eprintln!("Error: unknown option: {}", arg);
-        eprintln!("\n{}", USAGE);
+        eprintln!("Error: unknown option: {arg}");
+        eprintln!("\n{USAGE}");
         exit(1);
     }
 
-    Some(arg)
+    if let Some(pick) = option {
+        return Some((arg, pick));
+    }
+    Some((arg, String::new()))
 }
 
 fn version() -> String {
-    format!("giganto {}", env!("CARGO_PKG_VERSION"))
+    format!("project {}", env!("CARGO_PKG_VERSION"))
+}
+
+#[derive(Debug, IntoPrimitive)]
+#[repr(u16)]
+pub enum Qtype {
+    A = 1,
+    Ns,
+    Md,
+    Mf,
+    Cname,
+    Soa,
+    Mb,
+    Mg,
+    Mr,
+    Null,
+    Wks,
+    Ptr,
+    Hinfo,
+    Minfo,
+    Mx,
+    Txt,
+    Rp,
+    Afsdb,
+    X25,
+    Isdn,
+    Rt,
+    Nsap,
+    NsapPtr,
+    Sig,
+    Key,
+    Px,
+    Gpos,
+    Aaaa,
+    Loc,
+    Nxt,
+    Eid,
+    Nimloc,
+    Srv,
+    Atma,
+    Naptr,
+    Kx,
+    Cert,
+    A6,
+    Dname,
+    Sink,
+    Opt,
+    Apl,
+    Ds,
+    Sshfp,
+    Ipseckey,
+    Rrsig,
+    Nsec,
+    Dnskey,
+    Dhcid,
+    Nsec3,
+    Nsec3param,
+    Tlsa,
+    Smimea,
+    Hip = 55,
+    Ninfo,
+    Rkey,
+    Talink,
+    Cds,
+    Cdnskey,
+    Openpgpkey,
+    Csync,
+    Zonemd,
+    Svcb,
+    Https,
+    Spf = 99,
+    #[num_enum(default)]
+    Unknown,
 }
 
 #[cfg(test)]
-
 mod tests {
 
     #[tokio::test]

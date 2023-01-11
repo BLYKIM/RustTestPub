@@ -58,7 +58,7 @@ pub fn day_two() -> Result<()> {
             }
         }
     }
-    println!("{}", total);
+    println!("{total}");
 
     Ok(())
 }
