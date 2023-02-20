@@ -1,9 +1,12 @@
+mod wlkdir;
+
 use anyhow::Result;
 use chrono::Utc;
 use std::{
     fs::{File, OpenOptions},
     io::{BufRead, BufReader, Write},
 };
+pub use wlkdir::test_dir;
 
 ///
 /// # Panics
@@ -57,6 +60,7 @@ pub async fn read_file(path: &str) {
         if let Some(Ok(line)) = lines.next() {
             println!("{line}");
         }
+
         tokio::time::sleep(tokio::time::Duration::from_millis(300)).await;
     }
 }

@@ -1,10 +1,24 @@
+#[allow(unused)]
+mod advent;
+#[allow(unused)]
+mod anything;
+#[allow(unused)]
+mod ec;
+#[allow(unused)]
+mod file_test;
+#[allow(unused)]
+mod my_parser;
+#[allow(unused)]
+// pub mod postgres;
+#[allow(unused)]
 mod settings;
+
 // #[allow(clippy::wildcard_imports)]
 // use project::advent::*;
 use crate::settings::Settings;
 use anyhow::Result;
+use ec::test_3;
 use num_enum::IntoPrimitive;
-use project::ec::test_3;
 use std::{env, process::exit};
 
 const USAGE: &str = "\
@@ -51,6 +65,7 @@ async fn main() -> Result<()> {
     // test_two(&pick)?;
 
     test_3();
+    file_test::test_dir();
 
     Ok(())
 }
