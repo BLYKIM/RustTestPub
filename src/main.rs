@@ -65,7 +65,8 @@ async fn main() -> Result<()> {
     // test_two(&pick)?;
 
     test_3();
-    file_test::test_dir();
+    #[cfg(debug_assertions)]
+    file_test::toml();
 
     Ok(())
 }

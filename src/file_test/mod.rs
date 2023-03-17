@@ -3,9 +3,10 @@ mod wlkdir;
 use anyhow::Result;
 use chrono::Utc;
 use std::{
-    fs::{File, OpenOptions},
+    fs::{self, File, OpenOptions},
     io::{BufRead, BufReader, Write},
 };
+use toml_edit::{value, Document};
 pub use wlkdir::test_dir;
 
 ///
@@ -25,6 +26,40 @@ pub fn file_test() {
     //    for line in file.lines() {
     //        println!("{}", line);
     //    }
+}
+
+pub fn toml() {
+    let toml = fs::read_to_string("tests/config.toml").unwrap();
+    let mut doc = toml.parse::<Document>().unwrap();
+
+    // println!("\n{}", doc.to_string());
+    let name = doc.get("host_name").unwrap().to_string();
+    let retention = doc.get("retention").unwrap().to_string();
+    let graphql = doc.get("graphql_address").unwrap().to_string();
+    let ingestion = doc.get("ingest_address").unwrap().to_string();
+    let publish = doc.get("publish_address").unwrap().to_string();
+    println!("{name}\n{ingestion}\n{publish}\n{graphql}\n{retention}");
+
+    let strs = "100d".to_string();
+    doc["retention"] = value(strs);
+    doc["host_name"] = value("BLYKIM");
+    doc["graphql_address"] = value("127.0.0.1:8444");
+    let name = doc.get("host_name").unwrap().to_string();
+    let retention = doc.get("retention").unwrap().to_string();
+    let graphql = doc.get("graphql_address").unwrap().to_string();
+
+    println!("{name}\n{ingestion}\n{publish}\n{graphql}\n{retention}");
+    println!("========================================");
+    let output = doc.to_string();
+    let mut toml_file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open("tests/config.toml")
+        .unwrap();
+
+    writeln!(toml_file, "{output}");
+
+    println!("{output}");
 }
 
 // debug log writer from r
