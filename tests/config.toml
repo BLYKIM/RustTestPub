@@ -9,7 +9,5 @@ retention = "100d"
 data_dir = "tests/data_option"
 log_dir = "tests/logs/apps"
 export_dir = "tests/export"
-
-
-
+array = ["hi", "hello", "312"]
 
