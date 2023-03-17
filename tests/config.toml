@@ -1,1 +1,15 @@
-host_name = "bly"
+host_name = "BLYKIM"
+key = "../common_tests/key.pem"
+cert = "../common_tests/cert.pem"
+roots = ["../common_tests/root.pem"]
+ingest_address = "0.0.0.0:38370"
+publish_address = "0.0.0.0:38371"
+graphql_address = "127.0.0.1:8444"
+retention = "100d"
+data_dir = "tests/data_option"
+log_dir = "tests/logs/apps"
+export_dir = "tests/export"
+
+
+
+
