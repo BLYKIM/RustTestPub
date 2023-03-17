@@ -6,7 +6,7 @@ use std::{
     fs::{self, File, OpenOptions},
     io::{BufRead, BufReader, Write},
 };
-use toml_edit::{value, Document};
+use toml_edit::{value, Array, Document};
 pub use wlkdir::test_dir;
 
 ///
@@ -37,18 +37,23 @@ pub fn toml() {
     let retention = doc.get("retention").unwrap().to_string();
     let graphql = doc.get("graphql_address").unwrap().to_string();
     let ingestion = doc.get("ingest_address").unwrap().to_string();
-    let publish = doc.get("publish_address").unwrap().to_string();
-    println!("{name}\n{ingestion}\n{publish}\n{graphql}\n{retention}");
+    let array = doc.get("array").unwrap().to_string();
+    println!("{name}\n{ingestion}\n{array}\n{graphql}\n{retention}");
 
     let strs = "100d".to_string();
+    let tmp_vec: Vec<String> = vec!["hi".to_string(), "hello".to_string(), "312".to_string()];
+
     doc["retention"] = value(strs);
     doc["host_name"] = value("BLYKIM");
     doc["graphql_address"] = value("127.0.0.1:8444");
+    doc["array"] = value(Array::from_iter(tmp_vec.iter()));
+
     let name = doc.get("host_name").unwrap().to_string();
     let retention = doc.get("retention").unwrap().to_string();
     let graphql = doc.get("graphql_address").unwrap().to_string();
+    let array = doc.get("array").unwrap().to_string();
 
-    println!("{name}\n{ingestion}\n{publish}\n{graphql}\n{retention}");
+    println!("{name}\n{ingestion}\n{graphql}\n{retention}\n{array}");
     println!("========================================");
     let output = doc.to_string();
     let mut toml_file = OpenOptions::new()
