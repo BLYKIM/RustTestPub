@@ -5,6 +5,7 @@ use chrono::Utc;
 use std::{
     fs::{self, File, OpenOptions},
     io::{BufRead, BufReader, Write},
+    net::SocketAddr,
 };
 use toml_edit::{value, Array, Document};
 pub use wlkdir::test_dir;
@@ -46,14 +47,28 @@ pub fn toml() {
     doc["retention"] = value(strs);
     doc["host_name"] = value("BLYKIM");
     doc["graphql_address"] = value("127.0.0.1:8444");
-    doc["array"] = value(Array::from_iter(tmp_vec.iter()));
+    doc["array"] = value(tmp_vec.iter().collect::<Array>());
 
     let name = doc.get("host_name").unwrap().to_string();
     let retention = doc.get("retention").unwrap().to_string();
-    let graphql = doc.get("graphql_address").unwrap().to_string();
-    let array = doc.get("array").unwrap().to_string();
+    let graphql = doc
+        .get("graphql_address")
+        .unwrap()
+        .to_string()
+        .trim_matches('\"')
+        .parse::<SocketAddr>()
+        .expect("to_SocketAddr");
+    let array = doc
+        .get("array")
+        .unwrap()
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|s| s.to_string().trim_matches('\"').to_string())
+        .collect::<Vec<String>>();
 
-    println!("{name}\n{ingestion}\n{graphql}\n{retention}\n{array}");
+    println!("name:{name}\ningestion:{ingestion}\ngraphql:{graphql}\nretention:{retention}\narray:{array:?}");
+    println!("{tmp_vec:?}");
     println!("========================================");
     let output = doc.to_string();
     let mut toml_file = OpenOptions::new()
