@@ -21,7 +21,7 @@ num_enum = "0.6"
 #quinn = "0.9"
 rand = "0.8"
 rayon = "1.7"
-regex = "1.7"
+regex = "1.8"
 #roxy = { git = "https://github.com/aicers/roxy.git", tag = "0.1.0" }
 serde = { version = "1", features = ["derive"] }
 toml_edit = "0.19"
