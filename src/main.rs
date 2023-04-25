@@ -17,7 +17,7 @@ mod settings;
 // use project::advent::*;
 use crate::settings::Settings;
 use anyhow::Result;
-use ec::test_3;
+use my_parser::to_timestamp_nano;
 use num_enum::IntoPrimitive;
 use std::{env, process::exit};
 
@@ -63,8 +63,9 @@ async fn main() -> Result<()> {
 
     // test_one()?;
     // test_two(&pick)?;
+    to_timestamp_nano();
+    // test_3();
 
-    test_3();
     #[cfg(debug_assertions)]
     file_test::toml();
 
