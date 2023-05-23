@@ -1,9 +1,11 @@
 mod parse;
 mod regular;
+mod to_ts;
 
 pub use parse::{file_to_vec, parsec};
 pub use regular::regular;
 use std::path::Path;
+pub use to_ts::to_timestamp_nano;
 
 //use regex::internal::Inst;
 pub fn my_parser() {
