@@ -2,7 +2,7 @@ mod parse;
 mod regular;
 mod to_ts;
 
-pub use parse::{file_to_vec, parsec};
+pub use parse::{file_to_vec, parsec, vec_to_str_or_default};
 pub use regular::regular;
 use std::path::Path;
 pub use to_ts::to_timestamp_nano;
