@@ -1,6 +1,7 @@
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::{
+    fmt::Display,
     fs::{self, File},
     io::{self, BufRead, Write},
     path::Path,
@@ -99,4 +100,19 @@ pub fn file_to_vec(filepath: &Path) -> io::Result<Vec<String>> {
     let file_reader = io::BufReader::new(file_in);
 
     Ok(file_reader.lines().filter_map(io::Result::ok).collect())
+}
+
+pub fn vec_to_str_or_default<T>(vec_str: &Vec<T>) -> String
+where
+    T: Display,
+{
+    if vec_str.is_empty() {
+        "-".to_string()
+    } else {
+        vec_str
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+            .join(",")
+    }
 }

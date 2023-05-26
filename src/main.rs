@@ -17,9 +17,13 @@ mod settings;
 // use project::advent::*;
 use crate::settings::Settings;
 use anyhow::Result;
-use my_parser::to_timestamp_nano;
-use num_enum::IntoPrimitive;
-use std::{env, process::exit};
+// use my_parser::to_timestamp_nano;
+use num_enum::{FromPrimitive, IntoPrimitive};
+use std::{
+    env,
+    fmt::{Display, Formatter},
+    process::exit,
+};
 
 const USAGE: &str = "\
 USAGE:
@@ -45,7 +49,16 @@ async fn main() -> Result<()> {
 
     println!("host name: {}", settings.host_name);
 
-    println!("*** day_start ***");
+    let my_vec = vec!["ABC".to_string(), "bcd".to_string()];
+    let my_vec2 = vec![1, 2, 3, 10000];
+
+    println!(
+        "{}\n{}\n{}",
+        crate::my_parser::vec_to_str_or_default(&my_vec),
+        crate::my_parser::vec_to_str_or_default(&my_vec2),
+        Qtype::from(61),
+    );
+    // println!("*** day_start ***");
     // day_one()?;
     // day_two()?;
     // day_three()?;
@@ -63,11 +76,11 @@ async fn main() -> Result<()> {
 
     // test_one()?;
     // test_two(&pick)?;
-    to_timestamp_nano();
+    // to_timestamp_nano();
     // test_3();
 
-    #[cfg(debug_assertions)]
-    file_test::toml();
+    // #[cfg(debug_assertions)]
+    // file_test::toml();
 
     Ok(())
 }
@@ -108,7 +121,7 @@ fn version() -> String {
     format!("project {}", env!("CARGO_PKG_VERSION"))
 }
 
-#[derive(Debug, IntoPrimitive)]
+#[derive(Debug, IntoPrimitive, FromPrimitive)]
 #[repr(u16)]
 pub enum Qtype {
     A = 1,
@@ -178,6 +191,16 @@ pub enum Qtype {
     Spf = 99,
     #[num_enum(default)]
     Unknown,
+}
+
+impl Display for Qtype {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let upper = match self {
+            Self::NsapPtr => "NSAP-PTR".to_string(),
+            _ => format!("{self:?}").to_uppercase(),
+        };
+        write!(f, "{upper}")
+    }
 }
 
 #[cfg(test)]
