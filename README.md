@@ -2,4 +2,4 @@
 
 # RustTestPub
 
-Some testcodes and anything trash repository
+A repository that’s a hot mess of random test code, logs, and other junk, all written in Rust.
