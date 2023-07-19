@@ -13,6 +13,9 @@ mod my_parser;
 #[allow(unused)]
 mod settings;
 
+#[allow(unused)]
+mod service;
+
 // #[allow(clippy::wildcard_imports)]
 // use project::advent::*;
 use crate::settings::Settings;
@@ -49,15 +52,26 @@ async fn main() -> Result<()> {
 
     println!("host name: {}", settings.host_name);
 
-    let my_vec = vec!["ABC".to_string(), "bcd".to_string()];
+    let my_vec = vec![
+        "ABC".to_string(),
+        String::new(),
+        "cde".to_string(),
+        String::new(),
+        "efg".to_string(),
+        "fgh".to_string(),
+    ];
     let my_vec2 = vec![1, 2, 3, 10000];
-
+    let empty_string_vec = vec![String::new(), String::new()];
     println!(
-        "{}\n{}\n{}",
-        crate::my_parser::vec_to_str_or_default(&my_vec),
-        crate::my_parser::vec_to_str_or_default(&my_vec2),
-        Qtype::from(61),
+        "{:?} is empty? : {}",
+        empty_string_vec,
+        empty_string_vec.is_empty()
     );
+
+    let zipp = my_vec.iter().zip(my_vec2.iter());
+    for a in zipp {
+        println!("{a:?}");
+    }
     // println!("*** day_start ***");
     // day_one()?;
     // day_two()?;

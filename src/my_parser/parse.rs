@@ -99,7 +99,7 @@ pub fn file_to_vec(filepath: &Path) -> io::Result<Vec<String>> {
     let file_in = File::open(filepath)?;
     let file_reader = io::BufReader::new(file_in);
 
-    Ok(file_reader.lines().filter_map(io::Result::ok).collect())
+    Ok(file_reader.lines().map_while(Result::ok).collect())
 }
 
 pub fn vec_to_str_or_default<T>(vec_str: &Vec<T>) -> String
