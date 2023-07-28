@@ -1,9 +1,16 @@
 mod config;
+mod graphql;
 mod postgres;
+mod storage;
 mod tls;
 mod web;
 
-use self::config::Config;
+use self::{
+    config::Config,
+    graphql::schema,
+    postgres::Database,
+    storage::{DbOptions, Store},
+};
 use anyhow::Result;
 use std::{env, fs, process::exit};
 
@@ -26,12 +33,18 @@ async fn main() -> Result<()> {
 }
 
 async fn run(config: Config) -> Result<()> {
+    let store_path = config.data_dir.join("db");
+    let store_options = DbOptions::new(config.max_open_files, config.max_mb_of_level_base);
+    let store = Store::open(&store_path, &store_options)?;
+
     let db = postgres::Database::new(&config.database_url, &config.roots).await?;
 
     let cert_pem = fs::read(config.cert)?;
     let key_pem = fs::read(config.key)?;
 
-    web::serve(db, config.server_address, cert_pem, key_pem).await;
+    let schema = schema(db.clone(), store.clone());
+
+    web::serve(schema, config.server_address, cert_pem, key_pem).await;
     Ok(())
 }
 

@@ -1,0 +1,9 @@
+key = "tests/key.pem"
+cert = "tests/cert.pem"
+roots = ["tests/root.pem"]
+graphql_address = "127.0.0.1:8444"
+database_url="postgres://postgres:postgres@localhost:5432/postgres"
+data_dir = "tests/data"
+retention = "1d"
+max_open_files = 8000
+max_mb_of_level_base = 512
