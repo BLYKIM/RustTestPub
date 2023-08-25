@@ -22,9 +22,11 @@ use crate::settings::Settings;
 use anyhow::Result;
 // use my_parser::to_timestamp_nano;
 use num_enum::{FromPrimitive, IntoPrimitive};
+use serde::{Deserialize, Serialize};
 use std::{
     env,
     fmt::{Display, Formatter},
+    net::{IpAddr, Ipv4Addr},
     process::exit,
 };
 
@@ -95,8 +97,46 @@ async fn main() -> Result<()> {
 
     // #[cfg(debug_assertions)]
     // file_test::toml();
+    let new = DataField {
+        source: "aasd".to_string(),
+        src_addr: IpAddr::V4(Ipv4Addr::LOCALHOST),
+        src_port: 10,
+        dst_addr: IpAddr::V4(Ipv4Addr::BROADCAST),
+        dst_port: 123,
+        proto: 8,
+    };
+
+    let new_se = bincode::serialize(&new).unwrap();
+
+    println!("{new_se:?}");
+
+    let a = bincode::deserialize::<DataField>(&[
+        0, 0, 0, 0, 72, 167, 32, 248, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 248, 225, 99, 0, 0,
+        0, 0, 61, 248, 224, 253, 0, 0, 0, 0, 61, 248, 224, 99, 0, 0, 0, 0, 61, 248, 225, 52, 0, 0,
+        0, 0, 61, 248, 225, 103, 0, 0, 0, 0, 61, 248, 224, 197, 0, 0, 0, 0, 61, 248, 225, 110, 0,
+        0, 0, 0, 61, 248, 225, 81, 0, 0, 0, 0, 61, 248, 224, 237, 0, 0, 0, 0, 61, 248, 224, 227, 0,
+        0, 0, 0, 61, 248, 225, 44, 0, 0, 0, 0, 61, 248, 225, 50, 0, 0, 0, 0, 61, 248, 225, 41, 0,
+        0, 0, 0, 61, 248, 225, 96, 0, 0, 0, 0, 61, 248, 225, 84, 0, 0, 0, 0, 61, 248, 224, 52, 0,
+        0, 0, 0, 61, 248, 225, 113, 27, 0, 0, 0, 0, 0, 0, 0, 50, 48, 50, 51, 45, 48, 56, 45, 48,
+        51, 84, 48, 56, 58, 50, 48, 58, 48, 53, 46, 53, 52, 53, 54, 51, 57, 90, 30, 0, 0, 0, 0, 0,
+        0, 0, 50, 48, 50, 51, 45, 48, 56, 45, 48, 51, 84, 48, 56, 58, 50, 48, 58, 49, 51, 46, 53,
+        51, 53, 51, 52, 54, 48, 48, 51, 90, 6,
+    ]);
+
+    println!("{a:?}");
+    println!("{:?}", bincode::deserialize::<DataField>(&new_se));
 
     Ok(())
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+struct DataField {
+    pub source: String,
+    pub src_addr: IpAddr,
+    pub src_port: u16,
+    pub dst_addr: IpAddr,
+    pub dst_port: u16,
+    pub proto: u8,
 }
 
 fn parse() -> Option<(String, String)> {
