@@ -1,7 +1,7 @@
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
 
 pub fn to_timestamp_nano() {
-    let str = "2023-02-01T00:16:18.207+00:00";
+    let str = "2023-02-01T00:16:18.207817703+00:00";
 
     let datetime = NaiveDateTime::parse_from_str(str, "%Y-%m-%dT%H:%M:%S%.f%z").unwrap();
     let timestamp_nano = datetime.timestamp_nanos();
