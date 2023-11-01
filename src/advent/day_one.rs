@@ -25,7 +25,6 @@ pub fn day_one() -> Result<()> {
                     } else {
                         second = first;
                     }
-                } else {
                 }
                 first = sum_food;
             }

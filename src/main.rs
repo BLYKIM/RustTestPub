@@ -16,11 +16,13 @@ mod settings;
 #[allow(unused)]
 mod service;
 
+mod process;
+
 // #[allow(clippy::wildcard_imports)]
 // use project::advent::*;
 use crate::settings::Settings;
 use anyhow::Result;
-// use my_parser::to_timestamp_nano;
+use my_parser::to_timestamp_nano;
 use num_enum::{FromPrimitive, IntoPrimitive};
 use std::{
     env,
@@ -60,7 +62,7 @@ async fn main() -> Result<()> {
         "efg".to_string(),
         "fgh".to_string(),
     ];
-    let my_vec2 = vec![1, 2, 3, 10000];
+    let my_array = [1, 2, 3, 10000];
     let empty_string_vec = vec![String::new(), String::new()];
     println!(
         "{:?} is empty? : {}",
@@ -68,10 +70,12 @@ async fn main() -> Result<()> {
         empty_string_vec.is_empty()
     );
 
-    let zipp = my_vec.iter().zip(my_vec2.iter());
+    let zipp = my_vec.iter().zip(my_array.iter());
     for a in zipp {
         println!("{a:?}");
     }
+
+    // process::show_process_list();
     // println!("*** day_start ***");
     // day_one()?;
     // day_two()?;
@@ -90,7 +94,7 @@ async fn main() -> Result<()> {
 
     // test_one()?;
     // test_two(&pick)?;
-    // to_timestamp_nano();
+    to_timestamp_nano();
     // test_3();
 
     // #[cfg(debug_assertions)]

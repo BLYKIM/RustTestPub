@@ -172,20 +172,22 @@ fn rocksdb_options(db_options: &DbOptions) -> (Options, Options) {
 pub async fn retain_periodically(retention_period: Duration, store: Store) -> Result<()> {
     let mut itv = time::interval(time::Duration::from_secs(ONE_HOUR));
     let retention_duration = i64::try_from(retention_period.as_nanos())?;
-    let from = DateTime::<Utc>::from_utc(
+    let from = DateTime::<Utc>::from_naive_utc_and_offset(
         NaiveDateTime::from_timestamp_opt(61, 0).expect("valid time"),
         Utc,
     )
-    .timestamp_nanos()
+    .timestamp_nanos_opt()
+    .unwrap_or(i64::MAX)
     .to_be_bytes();
 
     loop {
         itv.tick().await;
         let event_store = store.event()?;
-        let standard_duration = Utc::now().timestamp_nanos() - retention_duration;
+        let standard_duration =
+            Utc::now().timestamp_nanos_opt().unwrap_or(i64::MAX) - retention_duration;
         let to = standard_duration.to_be_bytes();
         match event_store.db.delete_range_cf(event_store.cf, from, to) {
-            Ok(_) => {
+            Ok(()) => {
                 info!("event db deleted");
                 event_store
                     .db
