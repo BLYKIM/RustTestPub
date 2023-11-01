@@ -45,7 +45,7 @@ pub fn test_two(_pick: &str) -> Result<()> {
         return Err(anyhow!("Rdr failed"));
     };
 
-    let Ok(mut wrt)= writer("outputs/test_two.log") else {
+    let Ok(mut wrt) = writer("outputs/test_two.log") else {
         return Err(anyhow!("create fail"));
     };
 
@@ -63,9 +63,9 @@ pub fn test_two(_pick: &str) -> Result<()> {
             let secs = timestamp[..i].parse::<i64>()?;
             let micros = timestamp[i + 1..].parse::<u32>()?;
             let Some(time) = NaiveDateTime::from_timestamp_opt(secs, micros * 1000) else {
-                    return Err(anyhow!("failed to create NaiveDateTime from timestamp"));
-                };
-            DateTime::<Utc>::from_utc(time, Utc)
+                return Err(anyhow!("failed to create NaiveDateTime from timestamp"));
+            };
+            DateTime::<Utc>::from_naive_utc_and_offset(time, Utc)
         } else {
             bail!("invalid timestamp: {}", timestamp);
         };
@@ -122,15 +122,18 @@ pub fn test_3() {
     let zerosec = Utc
         .with_ymd_and_hms(2023, 1, 20, 0, 0, 0)
         .unwrap()
-        .timestamp_nanos();
+        .timestamp_nanos_opt()
+        .unwrap_or(i64::MAX);
     let onesec = Utc
         .with_ymd_and_hms(2023, 1, 20, 0, 0, 1)
         .unwrap()
-        .timestamp_nanos();
+        .timestamp_nanos_opt()
+        .unwrap_or(i64::MAX);
     let twosec = Utc
         .with_ymd_and_hms(2023, 1, 27, 10, 30, 0)
         .unwrap()
-        .timestamp_nanos();
+        .timestamp_nanos_opt()
+        .unwrap_or(i64::MAX);
     println!("{zerosec}, {onesec}, {twosec}");
 
     let serial_num = 1;

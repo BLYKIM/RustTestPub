@@ -51,7 +51,7 @@ pub fn day_five() -> Result<()> {
             stacks.get_mut(to).unwrap().push(c);
         }
     }
-    for i in stacks.iter() {
+    for i in stacks {
         println!("{:?}", i.last());
     }
     Ok(())

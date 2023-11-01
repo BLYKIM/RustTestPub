@@ -4,8 +4,10 @@ pub fn to_timestamp_nano() {
     let str = "2023-02-01T00:16:18.207817703+00:00";
 
     let datetime = NaiveDateTime::parse_from_str(str, "%Y-%m-%dT%H:%M:%S%.f%z").unwrap();
-    let timestamp_nano = datetime.timestamp_nanos();
+    let timestamp_nano = datetime.timestamp_nanos_opt().unwrap_or(i64::MAX);
     println!("{timestamp_nano}");
+
+    println!("{}", Utc.timestamp_nanos(1_692_766_493_000_000_000));
 }
 
 // 1675210578199601467

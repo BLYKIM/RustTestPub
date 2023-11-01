@@ -48,7 +48,7 @@ async fn graphql_handler(
         .operation_name
         .clone()
         .map_or(false, |operation_name| {
-            let queries = vec!["signIn"];
+            let queries = ["signIn"];
             queries.contains(&operation_name.as_str())
         });
 
