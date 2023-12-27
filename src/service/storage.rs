@@ -70,6 +70,33 @@ impl Store {
     }
 }
 
+#[derive(Clone)]
+pub struct SecondaryStore {
+    db: Arc<DB>,
+}
+
+impl SecondaryStore {
+    /// Opens the Secondary Store at the given path.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if a database open fails.
+    pub fn open(path: &Path, db_options: &DbOptions) -> Result<SecondaryStore> {
+        let sec_path = path.join("sec");
+        let (db_opts, cf_opts) = rocksdb_options(db_options);
+        let mut cfs_name: Vec<&str> = Vec::with_capacity(COLUMN_FAMILY_NAMES.len());
+        cfs_name.extend(COLUMN_FAMILY_NAMES);
+
+        let cfs = cfs_name
+            .into_iter()
+            .map(|name| ColumnFamilyDescriptor::new(name, cf_opts.clone()));
+
+        let db = DB::open_cf_descriptors_as_secondary(&db_opts, path, &sec_path, cfs)
+            .context("cannot open store")?;
+        Ok(SecondaryStore { db: Arc::new(db) })
+    }
+}
+
 pub struct EventStore<'db, T> {
     db: &'db DB,
     cf: &'db ColumnFamily,
